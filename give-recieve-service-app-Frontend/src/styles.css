@@ -1,0 +1,266 @@
+/* You can add global styles to this file, and also import other style files */
+@import url("https://unpkg.com/bootstrap@3.3.7/dist/css/bootstrap.css");
+
+.title {
+  font-weight: bold;
+  font-size: 30px;
+}
+.sub-title {
+  font-weight: 300;
+  font-size: 20px;
+}
+.author {
+  font-size: 20px;
+  font-style: italic;
+}
+
+.i {
+  display: flex;
+  height: 80vh;
+  margin-bottom: 50px;
+}
+.i-right {
+  flex: 1;
+  text-align: center;
+  padding-top: 50px;
+}
+.i-middle {
+  flex: 1;
+  text-align: center;
+}
+.i-left {
+  flex: 1;
+  text-align: center;
+  padding-top: 50px;
+}
+.catagory-marker-red {
+  height: 20px;
+  background-color: #781d42;
+}
+.catagory-marker-blue {
+  height: 20px;
+  background-color: #064663;
+}
+.catagory-marker-yellow {
+  height: 20px;
+  background-color: #ecb365;
+}
+.catagory-marker-green {
+  height: 20px;
+  background-color: #519259;
+}
+.catagory-marker-purple {
+  height: 20px;
+  background-color: #9145b6;
+}
+.catagory-marker-grey {
+  height: 20px;
+  background-color: #e6ddc4;
+}
+.each {
+  /* border: 1px solid #c3b091; */
+  border-radius: 5px;
+  /* width: 400px; */
+  text-align: center;
+  padding: 20px;
+  margin: 20px;
+  background-color: #fef5ed;
+}
+.each-accepted {
+  /* border: 1px solid #c3b091; */
+  border-radius: 5px;
+  /* width: 400px; */
+  text-align: center;
+  padding: 20px;
+  margin: 20px;
+  background-color: #dfd8ca;
+  opacity: 0.5;
+}
+.each-accepted:hover {
+  /* border: 1px solid #c3b091; */
+  border-radius: 5px;
+  /* width: 400px; */
+  text-align: center;
+  padding: 20px;
+  margin: 20px;
+  background-color: #dfd8ca;
+  opacity: 0.1;
+}
+.each-expired {
+  /* border: 1px solid #c3b091; */
+  visibility: hidden;
+}
+.each:hover {
+  cursor: pointer;
+  color: white;
+  border: 3px solid #c8e3d4;
+
+  text-align: center;
+  margin: 0;
+  background-color: #ffbc97;
+}
+.main-display {
+  width: 400px;
+  text-align: center;
+}
+.circle-button {
+  font-size: 30px;
+  font-weight: bold;
+  height: 125px;
+  width: 125px;
+  border-radius: 50%;
+}
+
+.commentContainer {
+  background-color: #eeebdd;
+  text-align: center;
+  padding: 20px;
+  border-radius: 10px;
+}
+.eachComment {
+  width: 200px;
+  border-radius: 10px;
+  background-color: #f0e9d2;
+  border: 1px solid #e6ddc4;
+  margin: 0 auto 0;
+  padding: 10px 15px 10px;
+}
+.comments {
+  background-color: #6166b3;
+  color: white;
+  border-radius: 10px;
+  height: 30px;
+  font-size: 20px;
+  cursor: pointer;
+}
+.commentInput {
+  margin: 10px 10px 5px;
+  border-radius: 4px;
+}
+.commentInput:hover {
+  margin: 6px 10px 5px;
+  border-radius: 4px;
+  width: 250px;
+  height: 35px;
+}
+.deco-lone {
+  color: white;
+  font-size: 30px;
+  height: 40px;
+}
+
+.general-margin {
+  margin: 15px;
+}
+.acceptoffer {
+  color: white;
+  background-color: #000957;
+}
+.fulfilledoffer {
+  width: 140px;
+  height: 140px;
+  color: white;
+  background-color: #b1e693;
+}
+
+a {
+  margin: 20px;
+}
+header,
+footer {
+  height: 70px;
+  background-color: #c3b091;
+  margin-left: 0px;
+  padding: 15px;
+}
+header {
+  margin-bottom: 20px;
+  height: 150px;
+}
+footer {
+  /* width: 100%; */
+  height: 120px;
+  /* position: relative; */
+  /* right: 100px; */
+  /* top: 30vh; */
+}
+nav {
+  margin: 30px;
+}
+.logout {
+  text-align: center;
+  width: 40%;
+  margin-left: 60%;
+  position: absolute;
+  top: 60px;
+}
+.highlighted-border {
+  border: 1px #f0d290 solid;
+  border-radius: 5px;
+  padding: 10px;
+  margin-top: 10px;
+  background-color: #f0d290;
+}
+.highlighted-border:hover {
+  border: 1px #de834d solid;
+  border-radius: 5px;
+  padding: 12px;
+  margin-top: 10px;
+  background-color: #de834d;
+  color: white;
+}
+.nav-div {
+  height: 20vh;
+  text-align: center;
+  padding-top: 0px;
+  /* top: 0; */
+  /* position: fixed */
+}
+.main-buttons {
+  width: 200px;
+  height: 100px;
+  text-align: center;
+  border: none;
+  border-radius: 10px;
+  font-size: 40px;
+  font-weight: bold;
+}
+.main-buttons-small {
+  color: #3d56b2;
+  width: 100px;
+  height: 50px;
+  text-align: center;
+  border: none;
+  border-radius: 8px;
+  font-size: 20px;
+  opacity: 0.5;
+}
+
+.nextBtn {
+  margin-top: 190px;
+
+  position: fixed;
+  font-weight: bold;
+}
+.prevBtn {
+  font-weight: bold;
+  margin-top: 100px;
+  /* margin-right: 100px; */
+  position: fixed;
+}
+.nextBtn:hover {
+  margin-top: 190px;
+  border: 4px #6166b3 solid;
+
+  position: fixed;
+  font-weight: bold;
+  color: #6166b3;
+}
+.prevBtn:hover {
+  color: #6166b3;
+  font-weight: bold;
+  margin-top: 100px;
+  /* margin-right: 100px; */
+  position: fixed;
+  border: 4px #6166b3 solid;
+}
