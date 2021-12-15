@@ -1,7 +1,7 @@
 import { Observable } from 'rxjs';
 import { GivenServiceService } from './given-service.service';
 import { ActivatedRoute, Router } from '@angular/router';
-import { FormBuilder, FormGroup } from '@angular/forms';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Component, Input, OnInit } from '@angular/core';
 
 @Component({
@@ -78,11 +78,20 @@ import { Component, Input, OnInit } from '@angular/core';
               formControlName="title"
               placeholder="title"
             />
+            <span
+              *ngIf="
+                addServiceForm.get('service')?.touched &&
+                !addServiceForm.get('service')?.valid
+              "
+              >This field is required</span
+            >
+
             <textarea
               class="form-control"
               formControlName="detail"
               placeholder="detail"
             ></textarea>
+
             <label class="form-control category" for=""> Catagory: </label>
 
             <select
@@ -104,6 +113,13 @@ import { Component, Input, OnInit } from '@angular/core';
             formControlName="hourlyPayment"
             placeholder="hourlyPayment"
           />
+          <span
+            *ngIf="
+              addServiceForm.get('hourlyPayment')?.touched &&
+              !addServiceForm.get('hourlyPayment')?.valid
+            "
+            >This field is required</span
+          ><br />
           <button class="general-margin btn btn-primary btn-lg">Submit</button>
         </form>
       </div>
@@ -134,6 +150,9 @@ import { Component, Input, OnInit } from '@angular/core';
         flex: 1;
         align-items: center;
         justify-content: center;
+      }
+      span {
+        color: red;
       }
     `,
   ],
@@ -175,15 +194,15 @@ export class AddGiveServiceComponent implements OnInit {
   }
   initializeForm() {
     this.addServiceForm = this.fb.group({
-      firstname: [''],
-      lastname: '',
+      firstname: ['', Validators.required],
+      lastname: ['', Validators.required],
       service: this.fb.group({
-        title: '',
-        detail: '',
-        catagory: '',
+        title: ['', Validators.required],
+        detail: ['', Validators.required],
+        catagory: ['', Validators.required],
       }),
       type: this.serviceType,
-      hourlyPayment: '',
+      hourlyPayment: ['', Validators.required],
     });
     if (this.user) {
       this.addServiceForm.get('firstname')?.setValue(this.user.firstname);
@@ -214,35 +233,49 @@ export class AddGiveServiceComponent implements OnInit {
       myData.lastname = this.user.lastname;
     }
     let sendRequest;
-    if(this.title.includes("Add")){
-      console.log("add");
-      sendRequest= this.provide
-      .addService(this.user._id,{ ...myData, location: this.geoLocation },this.serviceType+"d")
-    } else{
-      console.log("edit");
-      sendRequest=this.provide
-      .updateService(this.service._id,{ ...myData, location: this.geoLocation })
-    }
-    sendRequest
-      .subscribe((data: any) => {
-        console.log(data);
-        if (data.success) {
-          this.router.navigate([
-            '',
-            this.serviceType === 'provide' ? 'give' : 'recieve',
-          ]);
-        }
+    if (this.title.includes('Add')) {
+      console.log('add');
+      sendRequest = this.provide.addService(
+        this.user._id,
+        { ...myData, location: this.geoLocation },
+        this.serviceType + 'd'
+      );
+    } else {
+      console.log('edit');
+      sendRequest = this.provide.updateService(this.service._id, {
+        ...myData,
+        location: this.geoLocation,
       });
+    }
+    sendRequest.subscribe((data: any) => {
+      console.log(data);
+      if (data.success) {
+        this.router.navigate([
+          '',
+          this.serviceType === 'provide' ? 'give' : 'recieve',
+        ]);
+      }
+    });
 
     console.log(this.geoLocation);
     this.user = null;
   }
+  getCity() {
+    let lat = localStorage.getItem('latitude');
+    let lng = localStorage.getItem('longitude');
+    let url: any =
+      'https://us1.locationiq.com/v1/reverse.php?key=pk.49394be0747939b4728ca7153b519793&lat=lat&lon=lng&format=json';
 
+    this.provide.getCity(url).subscribe((city: any) => {
+      console.log(city);
+    });
+  }
   fetchLocation() {
     let x = navigator.geolocation.getCurrentPosition(
       function (x: any) {
         alert('Location accessed');
         console.log(x);
+
         localStorage.setItem('latitude', x.coords.latitude);
         localStorage.setItem('longitude', x.coords.longitude);
         localStorage.setItem('timestamp', x.timestamp);
@@ -265,5 +298,6 @@ export class AddGiveServiceComponent implements OnInit {
   ngOnInit(): void {
     this.initializeForm();
     this.fetchLocation();
+    // this.getCity();
   }
 }

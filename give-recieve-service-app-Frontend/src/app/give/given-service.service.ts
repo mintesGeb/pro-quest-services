@@ -10,14 +10,18 @@ export class GivenServiceService {
 
   constructor(private client: HttpClient) {}
 
-  getAllProvideServices(data:number=1) {
-    return this.client.get(this.baseURL + 'provide' + '?page='+data);
+  getCity(url: any) {
+    return this.client.get(url);
+  }
+
+  getAllProvideServices(data: number = 1) {
+    return this.client.get(this.baseURL + 'provide' + '?page=' + data);
   }
   postComment(id: any, data: any) {
     return this.client.post(this.baseURL + id + '/comment', data);
   }
-  getAllRequestServices(data:number=1) {
-    return this.client.get(this.baseURL + 'request' + '?page='+data);
+  getAllRequestServices(data: number = 1) {
+    return this.client.get(this.baseURL + 'request' + '?page=' + data);
   }
   getCourseById(id: any) {
     return this.client.get(this.baseURL + id);

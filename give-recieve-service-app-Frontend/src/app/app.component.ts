@@ -15,6 +15,7 @@ import jwt_decode from 'jwt-decode';
       <a [routerLink]="['']">
         <img src="assets/images/mintesLogo.png" alt="" />
       </a>
+      <h1 class="appname">Pro-Quest Services</h1>
       <div class="logout">
         <a
           class="highlighted-border"
@@ -87,14 +88,18 @@ import jwt_decode from 'jwt-decode';
       </div>
       <div class="i-right">
         <a [routerLink]="['', 'users']"
-          ><button *ngIf="isLoggedIn" class="btn btn-primary btn-lg showUsersBtn">Show Users</button></a
+          ><button
+            *ngIf="isLoggedIn"
+            class="btn btn-primary btn-lg showUsersBtn"
+          >
+            Show Users
+          </button></a
         >
       </div>
     </div>
+    <!-- <footer>copy right</footer> -->
 
     <router-outlet></router-outlet>
-
-    <!-- <footer></footer> -->
   `,
   styles: [
     `
@@ -116,7 +121,7 @@ import jwt_decode from 'jwt-decode';
       .i-right {
         flex: 1;
         text-align: left;
-        
+
         /* padding-left: 100px; */
         padding-top: 120px;
       }
@@ -124,8 +129,8 @@ import jwt_decode from 'jwt-decode';
         width: 50px;
         border-radius: 50%;
       }
-      .showUsersBtn{
-        margin-left:30px;
+      .showUsersBtn {
+        margin-left: 30px;
       }
     `,
   ],
