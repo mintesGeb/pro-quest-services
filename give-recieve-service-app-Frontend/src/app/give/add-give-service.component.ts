@@ -73,18 +73,18 @@ import { Component, Input, OnInit } from '@angular/core';
             placeholder="lastname"
           />
           <div formGroupName="service">
-            <input
-              class="form-control"
-              formControlName="title"
-              placeholder="title"
-            />
             <span
               *ngIf="
                 addServiceForm.get('service')?.touched &&
                 !addServiceForm.get('service')?.valid
               "
-              >This field is required</span
+              >All service fields are required</span
             >
+            <input
+              class="form-control"
+              formControlName="title"
+              placeholder="title"
+            />
 
             <textarea
               class="form-control"
@@ -107,6 +107,13 @@ import { Component, Input, OnInit } from '@angular/core';
                 {{ c }}
               </option>
             </select>
+            <span
+              *ngIf="
+                addServiceForm.get('service')?.touched &&
+                !addServiceForm.get('service')?.valid
+              "
+              >-------------------</span
+            >
           </div>
           <input
             class="form-control"
@@ -158,6 +165,7 @@ import { Component, Input, OnInit } from '@angular/core';
   ],
 })
 export class AddGiveServiceComponent implements OnInit {
+  city!:string;
   user!: any;
   title!: string;
   addServiceForm!: FormGroup;
@@ -237,7 +245,7 @@ export class AddGiveServiceComponent implements OnInit {
       console.log('add');
       sendRequest = this.provide.addService(
         this.user._id,
-        { ...myData, location: this.geoLocation },
+        { ...myData, location: {...this.geoLocation, city:this.city} },
         this.serviceType + 'd'
       );
     } else {
@@ -263,12 +271,12 @@ export class AddGiveServiceComponent implements OnInit {
   getCity() {
     let lat = localStorage.getItem('latitude');
     let lng = localStorage.getItem('longitude');
-    let url: any =
-      'https://us1.locationiq.com/v1/reverse.php?key=pk.49394be0747939b4728ca7153b519793&lat=lat&lon=lng&format=json';
-
-    this.provide.getCity(url).subscribe((city: any) => {
-      console.log(city);
-    });
+ 
+let url='http://mapquestapi.com/geocoding/v1/reverse?key=q5N7YWFQnHlQCfx0KyD5d1qoATAAFezV&location='+lat+','+lng;
+    this.provide.getCity(url).subscribe((data:any)=>{
+      this.city=(data.results[0].locations[0].adminArea5);
+    })
+    
   }
   fetchLocation() {
     let x = navigator.geolocation.getCurrentPosition(
@@ -298,6 +306,6 @@ export class AddGiveServiceComponent implements OnInit {
   ngOnInit(): void {
     this.initializeForm();
     this.fetchLocation();
-    // this.getCity();
+    this.getCity();
   }
 }

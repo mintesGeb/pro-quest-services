@@ -1,11 +1,13 @@
 let Service = require("../util/Models").ServiceModel;
 let Comment = require("../util/Models").CommentModel;
 let User = require("../util/UserModel");
+let axios = require("axios");
 
 exports.post = async (req, res, next) => {
   try {
     console.log(req.body, req.params.userId);
-    const newService = new Service({ ...req.body });
+
+    let newService = new Service(req.body);
 
     await newService.save();
 
@@ -39,19 +41,25 @@ exports.getProvided = async (req, res, next) => {
   try {
     const postPerPage = 5;
     const page = Math.max(0, req.query.page - 1);
-    let baseUrl='http://localhost:1211/services/provide?page='
+    const city = req.query.city;
+    console.log(city);
 
-    let myServices = await Service.find({ type: "provide" })
+    let baseUrl = "http://localhost:1211/services/provide?page=";
+
+    let myServices = await Service.find({
+      type: "provide",
+      "location.city": "Greenbelt",
+    })
       .sort({
         createdAt: -1,
       })
       .limit(postPerPage)
       .skip(postPerPage * page);
 
-      res.links({
-        previous:baseUrl+req.query.page,
-        next:baseUrl+(req.query.page+1)
-      })
+    res.links({
+      previous: baseUrl + req.query.page,
+      next: baseUrl + (req.query.page + 1),
+    });
 
     res.json({ success: true, data: myServices });
   } catch (e) {
@@ -62,8 +70,7 @@ exports.getRequested = async (req, res, next) => {
   try {
     const postPerPage = 5;
     const page = Math.max(0, req.query.page - 1);
-    let baseUrl="baseURL = 'http://localhost:1211/services/provide?page='"
- 
+    let baseUrl = "baseURL = 'http://localhost:1211/services/provide?page='";
 
     let myServices = await Service.find({ type: "request" })
       .sort({
@@ -87,7 +94,9 @@ exports.getById = async (req, res, next) => {
 };
 exports.getByName = async (req, res, next) => {
   try {
-    const myService = await Service.findOne({"sevice.title": req.params.name });
+    const myService = await Service.findOne({
+      "sevice.title": req.params.name,
+    });
     res.json({ success: true, data: myService });
   } catch (error) {
     next(error);

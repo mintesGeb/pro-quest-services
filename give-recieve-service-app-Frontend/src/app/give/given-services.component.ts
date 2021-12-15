@@ -47,39 +47,38 @@ declare const L: any;
               }"
             ></div>
           </div>
-          
         </div>
       </div>
       <ng-template #search>
         <div class="i-middle">
-        <div class="each" *ngFor="let s of searchResult">
-          <div
-            *ngIf="!s.expired"
-            [ngClass]="{
-              'each-expired': s.expired,
-              'each-accepted': s.fulfilled
-            }"
-          >
-            <div (click)="handleClick(s)">
-              <h3 class="title">{{ s.service.title }}</h3>
-
-              by
-              <p class="sub-title">{{ s.firstname }} {{ s.lastname }}</p>
-              <p>{{ s.createdAt | date: 'medium' }}</p>
-            </div>
+          <div class="each" *ngFor="let s of searchResult">
             <div
+              *ngIf="!s.expired"
               [ngClass]="{
-                'catagory-marker-yellow': s.service.catagory === 'food',
-                'catagory-marker-blue': s.service.catagory === 'hygine',
-                'catagory-marker-red': s.service.catagory === 'pets',
-                'catagory-marker-green': s.service.catagory === 'entertainment',
-                'catagory-marker-purple': s.service.catagory === 'religion',
-                'catagory-marker-grey': s.service.catagory === 'education'
+                'each-expired': s.expired,
+                'each-accepted': s.fulfilled
               }"
-            ></div>
+            >
+              <div (click)="handleClick(s)">
+                <h3 class="title">{{ s.service.title }}</h3>
+
+                by
+                <p class="sub-title">{{ s.firstname }} {{ s.lastname }}</p>
+                <p>{{ s.createdAt | date: 'medium' }}</p>
+              </div>
+              <div
+                [ngClass]="{
+                  'catagory-marker-yellow': s.service.catagory === 'food',
+                  'catagory-marker-blue': s.service.catagory === 'hygine',
+                  'catagory-marker-red': s.service.catagory === 'pets',
+                  'catagory-marker-green':
+                    s.service.catagory === 'entertainment',
+                  'catagory-marker-purple': s.service.catagory === 'religion',
+                  'catagory-marker-grey': s.service.catagory === 'education'
+                }"
+              ></div>
+            </div>
           </div>
-          
-        </div>
         </div>
       </ng-template>
       <div class="i-right">
@@ -106,12 +105,14 @@ declare const L: any;
     `,
   ],
 })
-export class GivenServicesComponent implements OnInit{
+export class GivenServicesComponent implements OnInit {
   services!: any[];
   dateNow = new Date();
   page!: number;
   searchResult!: any;
-  isSearching!:boolean;
+  isSearching!: boolean;
+  geoLocation!: any;
+  city!: any;
 
   constructor(
     private provide: GivenServiceService,
@@ -121,13 +122,16 @@ export class GivenServicesComponent implements OnInit{
 
   searching(e: any) {
     console.log(e.target.value);
-    this.isSearching=true;
-    this.searchResult = this.services.filter((ser) => 
-      this.searchResult=((ser.service.title).toLowerCase().includes ((e.target.value).toLowerCase()))
+    this.isSearching = true;
+    this.searchResult = this.services.filter(
+      (ser) =>
+        (this.searchResult = ser.service.title
+          .toLowerCase()
+          .includes(e.target.value.toLowerCase()))
     );
     console.log(this.searchResult);
-    if(!e.target.value){
-      this.isSearching=false
+    if (!e.target.value) {
+      this.isSearching = false;
     }
   }
 
@@ -144,7 +148,7 @@ export class GivenServicesComponent implements OnInit{
   }
 
   showMap(service: any) {
-    let coords = service.location.coords;
+    let coords = service[0].location.coords;
     let map = L.map('map').setView([coords.latitude, coords.longitude], 13);
 
     L.tileLayer(
@@ -160,23 +164,18 @@ export class GivenServicesComponent implements OnInit{
       }
     ).addTo(map);
 
-    let marker = L.marker([coords.latitude, coords.longitude]).addTo(map);
+    service.forEach((element: any) => {
+      let mycoords = element.location.coords;
 
-    marker
-      .bindPopup(
-        `<b>${service.service.title}</b><br>by <b>${service.firstname}</b>`
-      )
-      .openPopup();
+      let marker = L.marker([mycoords.latitude, mycoords.longitude]).addTo(map);
 
-    let myPopup = L.popup()
-      .setLatLng([coords.latitude, coords.longitude])
-      .setContent(`${service.service.title} by <b>${service.firstname}</b>`)
-      .openOn(map);
+      marker.bindPopup(`<b>${element.service.title}</b><br>`).openPopup();
+    });
   }
   previousGroup() {
     if (this.page > 1) {
       this.provide
-        .getAllProvideServices(this.page - 1)
+        .getAllProvideServices(this.city,this.page - 1)
         .subscribe((services: any) => {
           this.services = services.data;
           this.services.forEach((service: any) => {
@@ -189,7 +188,7 @@ export class GivenServicesComponent implements OnInit{
   nextGroup() {
     if (this.page >= 1) {
       this.provide
-        .getAllProvideServices(this.page + 1)
+        .getAllProvideServices(this.city,this.page + 1)
         .subscribe((services: any) => {
           if (services.data) {
             this.services = services.data;
@@ -223,18 +222,62 @@ export class GivenServicesComponent implements OnInit{
       console.log(service.service.title, service._id);
     }
   }
+  getCity() {
+    let lat = this.geoLocation.coords.latitude;
+    let lng = this.geoLocation.coords.longitude;
+
+    let url =
+      'http://mapquestapi.com/geocoding/v1/reverse?key=q5N7YWFQnHlQCfx0KyD5d1qoATAAFezV&location=' +
+      lat +
+      ',' +
+      lng;
+    this.provide.getCity(url).subscribe((data: any) => {
+      localStorage.setItem("city", data.results[0].locations[0].adminArea5);
+      console.log(this.city);
+
+    });
+  }
+
+  fetchLocation() {
+    let x = navigator.geolocation.getCurrentPosition(
+      function (x: any) {
+        // alert('Location accessed');
+        console.log(x);
+
+        localStorage.setItem('latitude', x.coords.latitude);
+        localStorage.setItem('longitude', x.coords.longitude);
+        localStorage.setItem('timestamp', x.timestamp);
+      },
+      function () {
+        alert('User not allowed');
+      },
+      { timeout: 10000 }
+    );
+    let myLocation: any = {
+      coords: {
+        latitude: localStorage.getItem('latitude'),
+        longitude: localStorage.getItem('longitude'),
+      },
+      timestamp: localStorage.getItem('timestamp'),
+    };
+    this.geoLocation = { ...myLocation };
+  }
 
   ngOnInit(): void {
-    this.provide.getAllProvideServices().subscribe((services: any) => {
+    this.fetchLocation();
+    this.getCity();
+    this.city=localStorage.getItem("city")
+
+    this.provide.getAllProvideServices(this.city).subscribe((services: any) => {
       // console.log(services.headers);
 
       this.services = services.data;
       this.page = 1;
       // console.log(this.services);
+      this.showMap(this.services);
       this.services.forEach((service: any) => {
         this.checkLocation(service.location);
         this.checkDate(service);
-        this.showMap(service);
       });
     });
 
@@ -247,6 +290,5 @@ export class GivenServicesComponent implements OnInit{
     //     zoom:6
     //   })
     // })
-
   }
 }

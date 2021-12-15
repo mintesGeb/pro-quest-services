@@ -1,6 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { ThrowStmt } from '@angular/compiler';
 import { Injectable } from '@angular/core';
+import axios from "axios";
 
 @Injectable({
   providedIn: 'root',
@@ -12,10 +13,13 @@ export class GivenServiceService {
 
   getCity(url: any) {
     return this.client.get(url);
+    //  axios.get(url).then(data=>{
+    //   return(data.data.results[0].locations[0].adminArea5);
+    // })
   }
 
-  getAllProvideServices(data: number = 1) {
-    return this.client.get(this.baseURL + 'provide' + '?page=' + data);
+  getAllProvideServices(city:string,data: number = 1) {
+    return this.client.get(this.baseURL + 'provide' + '?page=' + data+"&city="+city);
   }
   postComment(id: any, data: any) {
     return this.client.post(this.baseURL + id + '/comment', data);

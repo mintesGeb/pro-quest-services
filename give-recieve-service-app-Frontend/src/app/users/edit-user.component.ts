@@ -1,6 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { AuthService } from './../auth.service';
-import { FormGroup, FormBuilder } from '@angular/forms';
+import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { Router, ActivatedRoute } from '@angular/router';
 import { UsersService } from './users.service';
 import { Component, OnInit } from '@angular/core';
@@ -19,6 +19,7 @@ import { Component, OnInit } from '@angular/core';
             placeholder="Firstname"
             formControlName="firstname"
           />
+          <span *ngIf="myEditForm.get('firstname')?.touched && !myEditForm.get('firstname')?.valid">Firstname is required</span>
 
           <input
             type="text"
@@ -26,6 +27,7 @@ import { Component, OnInit } from '@angular/core';
             placeholder="Lastname"
             formControlName="lastname"
           />
+          <span *ngIf="myEditForm.get('lastname')?.touched && !myEditForm.get('lastname')?.valid">Lastname is required</span>
 
           <input
             type="text"
@@ -33,6 +35,7 @@ import { Component, OnInit } from '@angular/core';
             placeholder="Phone"
             formControlName="phone"
           />
+          <span *ngIf="myEditForm.get('phone')?.touched && !myEditForm.get('phone')?.valid">Phone is required</span>
           <br />
           <button class=" btn btn-primary btn-md">Submit</button>
         </form>
@@ -40,7 +43,10 @@ import { Component, OnInit } from '@angular/core';
       <div class="i-right"></div>
     </div>
   `,
-  styles: [],
+  styles: [`
+  span{
+    color:red;
+  }`],
 })
 export class EditUserComponent implements OnInit {
   myEditForm!: FormGroup;
@@ -68,9 +74,9 @@ export class EditUserComponent implements OnInit {
   updateUser() {}
   initializeForm() {
     this.myEditForm = this.fb.group({
-      firstname: '',
-      lastname: '',
-      phone: '',
+      firstname: ['', Validators.required],
+      lastname: ['', Validators.required],
+      phone: ['', Validators.required],
     });
     this.myEditForm.get('firstname')?.setValue(this.myUser.firstname);
     this.myEditForm.get('lastname')?.setValue(this.myUser.lastname);

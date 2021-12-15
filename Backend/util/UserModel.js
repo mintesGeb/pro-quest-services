@@ -8,11 +8,14 @@ const UserSchema = new Schema({
   password: { type: String, required: true },
   phone: { type: String, default: "**********" },
   address: {
-    street: String,
+    house_number:String,
+    road: String,
     city: String,
+    country:String,
     state: String,
-    zipcode: String,
+    postcode: String,
     country: String,
+    country_code:String
   },
   provided: { type: Array, default: [] },
   requestd: { type: Array, default: [] },

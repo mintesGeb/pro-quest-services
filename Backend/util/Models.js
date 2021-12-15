@@ -11,7 +11,7 @@ const CommentSchema = new Schema({
 const ServiceSchema = new Schema({
   firstname: { type: String, required: true },
   lastname: { type: String, required: true },
-  creatorId:{type:Number},
+  creatorId: { type: Number },
   service: {
     title: { type: String, required: true },
     detail: { type: String, required: true },
@@ -25,10 +25,12 @@ const ServiceSchema = new Schema({
   fulfilled: { type: Boolean, default: false },
   hourlyPayment: { type: Number, required: true },
   location: {
+    city: { type: String, required: true, default: "Laurel" },
     coords: {
       latitude: { type: String, required: true },
       longitude: { type: String, required: true },
     },
+
     timestamp: { type: String, required: true },
   },
   comment: { type: Array, default: [] },
