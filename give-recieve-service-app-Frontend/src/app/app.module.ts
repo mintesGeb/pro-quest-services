@@ -54,7 +54,7 @@ import { UsersComponent } from './users.component';
         loadChildren: () =>
           import('./users/users.module').then((m) => m.UsersModule),
         canActivate: [LoginGuard],
-      },
+      },// {preloadingStrategy: typeof PreloadAllModules}
     ]),
   ],
   providers: [

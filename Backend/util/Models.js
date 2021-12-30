@@ -25,7 +25,7 @@ const ServiceSchema = new Schema({
   fulfilled: { type: Boolean, default: false },
   hourlyPayment: { type: Number, required: true },
   location: {
-    city: { type: String, required: true, default: "Laurel" },
+    city: { type: String, required: true, default: "" },
     coords: {
       latitude: { type: String, required: true },
       longitude: { type: String, required: true },

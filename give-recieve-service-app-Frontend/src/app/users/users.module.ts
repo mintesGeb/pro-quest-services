@@ -22,6 +22,6 @@ import { ReactiveFormsModule } from '@angular/forms';
       {path:"profile/:email",component:MyuserComponent},
       {path:'edit-profile/:email',component:EditUserComponent}
     ])
-  ]
+  ],
 })
 export class UsersModule { }

@@ -1,11 +1,12 @@
 var createError = require("http-errors");
 var express = require("express");
+let port = process.env.PORT || 1211;
 var path = require("path");
 var cookieParser = require("cookie-parser");
 var logger = require("morgan");
 let cors = require("cors");
 const authController = require("./controller/auth");
-const fs=require("file-system")
+const fs = require("file-system");
 
 var indexRouter = require("./routes/index");
 var usersRouter = require("./routes/users");
@@ -25,19 +26,20 @@ app.use(logger("dev"));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
+app.use(express.static(path.join(__dirname,"give-recieve-service-app-Frontend")));
 
 app.use("/", indexRouter);
-app.use("/users",usersRouter);
-app.use("/services",authController.authorize, servicesRouter);
-// app.all('*', async(req,res)=>{
-//   fs.createReadStream("../give-recieve-service-app-Frontend/index.html").pipe(res)
-// }
+app.use("/api/users", usersRouter);
+app.use("/api/services", authController.authorize, servicesRouter);
+
+app.use('/*', (req,res)=>{
+  res.sendFile(path.join(__dirname +"/give-recieve-service-app-Frontend/index.html"))
+})
 
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {
   next(createError(404));
 });
-
 // error handler
 app.use(function (err, req, res, next) {
   // set locals, only providing error in development
@@ -46,9 +48,9 @@ app.use(function (err, req, res, next) {
 
   // render the error page
   res.status(err.status || 500);
-  res.json({error:err})
+  res.json({ error: err });
   // res.render("error");
 });
 
 // module.exports = app;
-app.listen(1211);
+app.listen(port);

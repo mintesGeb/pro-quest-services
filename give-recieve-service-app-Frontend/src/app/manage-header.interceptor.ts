@@ -16,6 +16,7 @@ export class ManageHeaderInterceptor implements HttpInterceptor {
     request: HttpRequest<unknown>,
     next: HttpHandler
   ): Observable<HttpEvent<unknown>> {
+    
     let newRequest = request.clone({
       headers: request.headers.set('Content-Type', 'application/json'),
     });

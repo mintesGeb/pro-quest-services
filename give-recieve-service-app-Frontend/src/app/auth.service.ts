@@ -6,7 +6,7 @@ import { Router } from '@angular/router';
   providedIn: 'root',
 })
 export class AuthService {
-  baseUrl: string = 'http://localhost:1211/users/';
+  baseUrl: string = 'http://localhost:1211/api/users/';
 
   constructor(private router: Router, private client: HttpClient) {}
   login(cred: { email: string; password: string }) {

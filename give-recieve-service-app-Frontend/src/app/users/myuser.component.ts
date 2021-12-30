@@ -1,3 +1,4 @@
+import { GivenServiceService } from './../give/given-service.service';
 import { UsersService } from './users.service';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Component, DoCheck, OnInit } from '@angular/core';
@@ -18,6 +19,7 @@ import { Component, DoCheck, OnInit } from '@angular/core';
             Delete
           </button>
         </div>
+        
       </div>
       <div class="i-middle">
         <div>
@@ -31,7 +33,20 @@ import { Component, DoCheck, OnInit } from '@angular/core';
           <h4 class="userInfo">{{ myuser.phone }}</h4>
         </div>
       </div>
-      <div class="i-right"></div>
+      <div class="i-right">
+      <button class="general-margin btn btn basic" (click)="showServices()">My Services</button>
+      <button class="btn btn basic" (click)="showRequests()">My Requests</button>
+      <div *ngIf="showingServices">
+        <div *ngFor="let ser of myServices">
+
+          <p>{{ser.service.title}}</p>
+        </div>
+
+      </div>
+      <div *ngIf="showingRequests">
+        <p>Showing Rquests</p>
+      </div>
+      </div>
     </div>
   `,
   styles: [
@@ -51,11 +66,42 @@ export class MyuserComponent implements OnInit, DoCheck {
   myuser!: any;
   user!: any;
   edittedData!: any;
+  showingServices=false
+  showingRequests=false
+  myUserProvided!:any;
+  myUserRequested!:any;
+  myServices!:any[]
+  myRequests!:any[]
+
+  showServices(){
+    this.showingServices=true;
+  this.showingRequests=false;
+  // console.log (this.myuser.provided)
+  this.myuser.provided.forEach((id:any) => {
+    console.log(id);
+    
+    this.service.getCourseById(id).subscribe((serv:any)=>{
+      if(serv.data){
+        console.log(serv.data);
+        this.myServices=[...this.myServices,(serv.data)]
+      }
+    })
+
+  });
+  console.log(this.myServices);
+
+  }
+  showRequests(){
+    this.showingServices=false
+    this.showingRequests=true
+    console.log (this.myuser.requested)
+  }
 
   constructor(
     private ar: ActivatedRoute,
     private userManager: UsersService,
-    private router: Router
+    private router: Router,
+    private service: GivenServiceService
   ) {
     this.ar.paramMap.subscribe((params: any) => {
       this.email = params.get('email');
@@ -96,6 +142,14 @@ export class MyuserComponent implements OnInit, DoCheck {
       ) {
         this.isCreator = true;
       }
+    });
+console.log(this.myuser.provided);
+    this.myuser.provided.forEach((id:any) => {
+      console.log(id);
+      
+      // this.service.getCourseById(id).subscribe((serv:any)=>{
+      //   console.log(serv.data)
+      // })
     });
   }
 

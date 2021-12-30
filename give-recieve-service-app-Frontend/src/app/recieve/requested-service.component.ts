@@ -233,6 +233,6 @@ export class RequestedServiceComponent implements OnInit, DoCheck {
     ) {
       this.isCreator = false;
     }
-    console.log(this.service.fulfilled);
+
   }
 }

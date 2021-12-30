@@ -43,7 +43,7 @@ declare const L: any;
 
         <p class="sub-title">{{ service.service.detail }}</p>
         $ <span class="h3">{{ service.hourlyPayment }}</span> per hour by
-        <a ><p class="author">
+        <a  ><p class="author">
             {{ service.firstname }} {{ service.lastname }}
           </p></a
         >

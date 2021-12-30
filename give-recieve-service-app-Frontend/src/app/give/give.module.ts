@@ -19,7 +19,7 @@ import { CatagoryPipe } from './catagory.pipe';
 
   ],
   imports: [
-   
+
     CommonModule,
     ReactiveFormsModule,
     RouterModule.forChild([

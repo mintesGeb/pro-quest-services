@@ -10,56 +10,6 @@ import { Component, Input, OnInit } from '@angular/core';
     <div class="i">
       <div class="i-left"></div>
       <div class="i-middle">
-        <!-- <form [formGroup]="addServiceForm" (ngSubmit)="onSubmit()">
-          <input
-            type="text"
-            class="form-control"
-            placeholder="Firstname"
-            formControlName="firstname"
-          />
-          <input
-            type="text"
-            class="form-control"
-            
-            placeholder="Lastname"
-            formControlName="lastname"
-          />
-
-          <div formGroupName="services">
-            <input
-              type="text"
-              class="form-control"
-              placeholder="Title"
-              formControlName="title"
-            />
-
-            <input
-              type="text"
-              class="form-control"
-              placeholder="Detail"
-              formControlName="detail"
-            />
-            <label for=""> Catagory: </label>
-
-            <select
-            class="form-control"
-              formControlName="catagory"
-              (change)="selectCatagory($event)"
-            >
-              <option *ngFor="let c of catagories" [ngValue]="c">
-                {{ c }}
-              </option>
-            </select>
-          </div>
-          <input
-            type="text"
-            class="form-control"
-            placeholder="HourlyCharge"
-            formControlName="hourlyPayment"
-          />
-
-          <button type="submit" class="btn btn-primary">Submit</button>
-        </form> -->
         <h1>{{ title }}</h1>
         <form [formGroup]="addServiceForm" (ngSubmit)="onSubmit()">
           <input

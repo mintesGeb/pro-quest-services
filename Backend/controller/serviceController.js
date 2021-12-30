@@ -48,7 +48,7 @@ exports.getProvided = async (req, res, next) => {
 
     let myServices = await Service.find({
       type: "provide",
-      "location.city": "Greenbelt",
+      "location.city":req.query.city,
     })
       .sort({
         createdAt: -1,

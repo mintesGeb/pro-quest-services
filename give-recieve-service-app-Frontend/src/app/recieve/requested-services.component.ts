@@ -97,7 +97,7 @@ declare const L: any;
     `
       #map {
         width: 100%;
-        height: 90%;
+        height: 70%;
       }
     `,
   ],
@@ -189,6 +189,7 @@ export class RequestedServicesComponent implements OnInit {
       .openOn(map);
   }
   checkDate(service: any) {
+    console.log(service);
     let today: any = new Date();
     let dateCreated: any = new Date(service.createdAt);
     let diffInMilliSec = Math.abs(today - dateCreated) / 1000;
@@ -203,9 +204,10 @@ export class RequestedServicesComponent implements OnInit {
     this.recieve.getAllRequestServices().subscribe((services: any) => {
       this.services = services.data;
       this.page = 1;
-      console.log(this.services);
-      this.services.forEach((service: any) => {
-        this.showMap(service);
+      this.services.forEach((ser: any) => {
+        console.log(ser);
+        this.checkDate(ser);
+        this.showMap(ser);
       });
     });
   }

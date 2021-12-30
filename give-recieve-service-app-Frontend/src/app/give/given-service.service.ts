@@ -7,15 +7,12 @@ import axios from "axios";
   providedIn: 'root',
 })
 export class GivenServiceService {
-  baseURL = 'http://localhost:1211/services/';
+  baseURL = 'http://localhost:1211/api/services/';
 
   constructor(private client: HttpClient) {}
 
   getCity(url: any) {
     return this.client.get(url);
-    //  axios.get(url).then(data=>{
-    //   return(data.data.results[0].locations[0].adminArea5);
-    // })
   }
 
   getAllProvideServices(city:string,data: number = 1) {

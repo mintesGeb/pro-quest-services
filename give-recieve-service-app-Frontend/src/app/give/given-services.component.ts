@@ -100,12 +100,12 @@ declare const L: any;
     `
       #map {
         width: 100%;
-        height: 90%;
+        height: 70%;
       }
     `,
   ],
 })
-export class GivenServicesComponent implements OnInit {
+export class GivenServicesComponent implements OnInit, DoCheck {
   services!: any[];
   dateNow = new Date();
   page!: number;
@@ -118,7 +118,9 @@ export class GivenServicesComponent implements OnInit {
     private provide: GivenServiceService,
     private router: Router,
     private client: HttpClient
-  ) {}
+  ) {
+    this.city = localStorage.getItem("city")
+  }
 
   searching(e: any) {
     console.log(e.target.value);
@@ -140,7 +142,7 @@ export class GivenServicesComponent implements OnInit {
     const lat = position.coords.latitude;
     const lon = position.coords.longitude;
     console.log(lat, lon);
-    this.displayLocation(lat, lon);
+    // this.displayLocation(lat, lon);
   }
 
   displayLocation(latitude: string, longitude: string) {
@@ -175,7 +177,7 @@ export class GivenServicesComponent implements OnInit {
   previousGroup() {
     if (this.page > 1) {
       this.provide
-        .getAllProvideServices(this.city,this.page - 1)
+        .getAllProvideServices(this.city, this.page - 1)
         .subscribe((services: any) => {
           this.services = services.data;
           this.services.forEach((service: any) => {
@@ -188,7 +190,7 @@ export class GivenServicesComponent implements OnInit {
   nextGroup() {
     if (this.page >= 1) {
       this.provide
-        .getAllProvideServices(this.city,this.page + 1)
+        .getAllProvideServices(this.city, this.page + 1)
         .subscribe((services: any) => {
           if (services.data) {
             this.services = services.data;
@@ -223,36 +225,26 @@ export class GivenServicesComponent implements OnInit {
     }
   }
   getCity() {
-    let lat = this.geoLocation.coords.latitude;
-    let lng = this.geoLocation.coords.longitude;
+    let lat = localStorage.getItem('latitude');
+    let lng = localStorage.getItem('longitude');
+    let key = 'HkNMLlrytjUgy3XYLEdlIdKA09yvLFLH';
 
     let url =
-      'http://mapquestapi.com/geocoding/v1/reverse?key=q5N7YWFQnHlQCfx0KyD5d1qoATAAFezV&location=' +
+      'http://mapquestapi.com/geocoding/v1/reverse?key=' +
+      key +
+      '&location=' +
       lat +
       ',' +
       lng;
-    this.provide.getCity(url).subscribe((data: any) => {
-      localStorage.setItem("city", data.results[0].locations[0].adminArea5);
-      console.log(this.city);
 
+    this.provide.getCity(url).subscribe((data: any) => {
+      localStorage.setItem('city', JSON.stringify(data.results[0].locations[0].adminArea5));
     });
+    let city:any=localStorage.getItem('city');
+    this.city = JSON.parse(city)
   }
 
   fetchLocation() {
-    let x = navigator.geolocation.getCurrentPosition(
-      function (x: any) {
-        // alert('Location accessed');
-        console.log(x);
-
-        localStorage.setItem('latitude', x.coords.latitude);
-        localStorage.setItem('longitude', x.coords.longitude);
-        localStorage.setItem('timestamp', x.timestamp);
-      },
-      function () {
-        alert('User not allowed');
-      },
-      { timeout: 10000 }
-    );
     let myLocation: any = {
       coords: {
         latitude: localStorage.getItem('latitude'),
@@ -264,31 +256,21 @@ export class GivenServicesComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.fetchLocation();
-    this.getCity();
-    this.city=localStorage.getItem("city")
+    // this.fetchLocation();
 
+    console.log(this.city);
     this.provide.getAllProvideServices(this.city).subscribe((services: any) => {
-      // console.log(services.headers);
+      console.log(services.data);
 
       this.services = services.data;
       this.page = 1;
-      // console.log(this.services);
-      this.showMap(this.services);
+
+      // this.showMap(this.services);
       this.services.forEach((service: any) => {
-        this.checkLocation(service.location);
+        // this.checkLocation(service.location);
         this.checkDate(service);
       });
     });
-
-    // let loader = new Loader({
-    //   apiKey:'AIzaSyC80hMQpD_w7rJc4NuheAMwpLxo1nP5mxc',
-    // })
-    // loader.load().then(()=>{
-    //   new google.maps.Map(document.getElementById("map"),{
-    //     center:{lat:51.12,lng:6.78},
-    //     zoom:6
-    //   })
-    // })
   }
+  ngDoCheck() {}
 }
